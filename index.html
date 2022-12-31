@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>What the Hex?</title>
+
+    <style>
+        html {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 100px;
+            font-size: 50px;
+        }
+
+        .colors {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 100px;
+            list-style-type: none;
+        }
+
+        .btn {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        #guessText {
+            text-align: center;
+            margin-top: 50px;
+            color: grey;
+            font-size: 50px;
+        }
+
+        #again {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .buttonH1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #genNew {
+            border: none;
+            color: white;
+            background-color: white;
+            height: 50px;
+            width: 200px;
+        }
+
+        .container {
+            height: 20px;
+            position: relative;
+        }
+
+        .center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .active {
+            color: white;
+            background-color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        <span id="target"></span>
+    </h1>
+
+    <div class="colors">
+        <button class="btn" id="0" onclick=guess()>&nbsp</button>
+        <button class="btn" id="1" onclick=guess()>&nbsp</button>
+        <button class="btn" id="2" onclick=guess()>&nbsp</button>
+        <button class="btn" id="3" onclick=guess()>&nbsp</button>
+    </div>
+
+    <div class="numberGuesser">
+        <p id="guessText">GUESS THE COLOR</p>
+        <h1 class="buttonH1">
+            <button id="genNew">Generate New Random Color</button>
+        </h1>
+    </div>
+
+    <div class="container">
+        <div class="center">
+            DIFFICULTY:
+            <button id="b1">1</button>
+            <button id="b2">2</button>
+            <button id="b3" class="active">3</button>
+        </div>
+    </div>
+
+    <script>
+        var easy = document.querySelector('#b1');
+        var normal = document.querySelector('#b2');
+        var hard = document.querySelector('#b3');
+
+        const resetButton = document.querySelector('#genNew');
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        const randomColor2 = Math.floor(Math.random() * 16777215).toString(16);
+        const randomColor3 = Math.floor(Math.random() * 16777215).toString(16);
+        const randomColor4 = Math.floor(Math.random() * 16777215).toString(16);
+
+
+        var array = [0, 1, 2, 3];
+
+        document.getElementById("target").textContent = "#" + randomColor;
+
+        var index = Math.floor((Math.random()) * 4);
+
+        document.getElementById(index).style.backgroundColor = "#" + randomColor;
+
+        let remove = array.splice(index, 1);
+
+        document.getElementById(array[0]).style.backgroundColor = "#" + randomColor2;
+
+        document.getElementById(array[1]).style.backgroundColor = "#" + randomColor3;
+
+        document.getElementById(array[2]).style.backgroundColor = "#" + randomColor4;
+
+
+        easy.addEventListener("click", function () {
+            easy.classList.add("active");
+            normal.classList.remove("active");
+            hard.classList.remove("active");
+
+            easy.disabled = true;
+            normal.disabled = true;
+            hard.disabled = true;
+
+            document.getElementById(array[0]).style.display = "none";
+            document.getElementById(array[1]).style.display = "none";
+        })
+
+        normal.addEventListener("click", function () {
+            easy.classList.remove("active");
+            normal.classList.add("active");
+            hard.classList.remove("active");
+
+            easy.disabled = true;
+            normal.disabled = true;
+            hard.disabled = true;
+
+            var kill = Math.floor((Math.random()) * 3);
+
+            document.getElementById(array[kill]).style.display = "none";
+        })
+
+        hard.addEventListener("click", function () {
+            easy.classList.remove("active");
+            normal.classList.remove("active");
+            hard.classList.add("active");
+        })
+
+
+        function guess() {
+            if (document.activeElement.id == index) {
+                document.getElementById("guessText").textContent = "CORRECT!";
+                document.getElementById("guessText").style.color = "grey";
+                document.getElementById("target").style.color = "#" + randomColor;
+                setGameOver();
+            }
+            else {
+                let yourColor = document.activeElement.style.backgroundColor;
+                document.getElementById("guessText").textContent = "TRY AGAIN. THAT COLOR WAS " + yourColor;
+                document.activeElement.style.backgroundColor = "white";
+                document.activeElement.style.cursor = "auto";
+                document.getElementById("guessText").style.color = "grey";
+
+                easy.disabled = true;
+                normal.disabled = true;
+                hard.disabled = true;
+            }
+        }
+
+        function setGameOver() {
+            document.getElementsByClassName("btn")[0].style.cursor = "auto";
+            document.getElementsByClassName("btn")[1].style.cursor = "auto";
+            document.getElementsByClassName("btn")[2].style.cursor = "auto";
+            document.getElementsByClassName("btn")[3].style.cursor = "auto";
+
+            document.getElementsByClassName("btn")[0].removeAttribute("onclick");
+            document.getElementsByClassName("btn")[1].removeAttribute("onclick");
+            document.getElementsByClassName("btn")[2].removeAttribute("onclick");
+            document.getElementsByClassName("btn")[3].removeAttribute("onclick");
+
+            easy.disabled = true;
+            normal.disabled = true;
+            hard.disabled = true;
+
+            resetButton.addEventListener("click", resetGame);
+            resetButton.style.border = '2px solid black';
+            resetButton.style.color = 'black';
+            resetButton.style.backgroundColor = 'grey';
+            resetButton.style.height = '50px';
+            resetButton.style.width = '200px';
+        }
+
+        function resetGame() {
+            window.location.reload();
+        }
+
+    </script>
+</body>
+
+</html>
